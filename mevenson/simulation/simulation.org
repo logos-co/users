@@ -32,7 +32,7 @@ Simulate up to 10^4 nodes adding 10, 100, 1000?
 
 #+caption: use these on a base templateo
 | a1               | $.consensus_settings.glacier.evidence_alpha   |
-| a2               | $.consensus_settings                          |
+| a2               | $.consensus_settings.glacier.evidence_alpha_2 |
 | l                | $.consensus_settings.glacier.look_ahead       |
 | k                | $.consensus_settings.query.initial_query_size |
 | k_multiplier     | $.consensus_settings.query_multiplier         |
@@ -40,7 +40,8 @@ Simulate up to 10^4 nodes adding 10, 100, 1000?
 | n                | $.byzantine_settings.total_size               |
 | n_honest         | $.byzantine_settings.honest                   |
 | initial yes      | $.distribution.yes                            |
-| intial no        | $.distribution.no                                   |
+| intial no        | $.distribution.no                             |
+|                  |                                               |
 
 ** TODO Double check that this is all we need.
 
