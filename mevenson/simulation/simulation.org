@@ -24,13 +24,31 @@ to produce a plot of total yes, no, and undecided per round.
 
 Simulate up to 10^4 nodes adding 10, 100, 1000?
 
+#+caption: run Glauber simulator
+#+begin_src bash
+./target/release-opt/consensus-simulations --input-settings etc/glacier.json --output-file=./var/glauber.output
+#+end_src
+** TODO Grind out parametrized settings with existing code
+
+#+caption: use these on a base templateo
+| a1               | $.consensus_settings.glacier.evidence_alpha   |
+| a2               | $.consensus_settings                          |
+| l                | $.consensus_settings.glacier.look_ahead       |
+| k                | $.consensus_settings.query.initial_query_size |
+| k_multiplier     | $.consensus_settings.query_multiplier         |
+| k_multiplier_max | $.consensus_settings.max_multiplier           |
+| n                | $.byzantine_settings.total_size               |
+| n_honest         | $.byzantine_settings.honest                   |
+| initial yes      | $.distribution.yes                            |
+| intial no        | $.distribution.no                                   |
+
 ** TODO Double check that this is all we need.
 
-no opinion votes can be derived…
+opinion votes can be derived…
 * TODO Make parameters depend on network size
 * Colophon
 #+begin_example
 @easye <mark.evenson@status.im>
 Created: 01-SEP-2022
-Revised: <2022-09-01 Thu 15:32Z>
+Revised: <2022-09-01 Thu 15:45Z>
 #+end_example
