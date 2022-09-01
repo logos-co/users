@@ -22,12 +22,15 @@ integers per round:
 
 to produce a plot of total yes, no, and undecided per round.
 
+Simulate up to 10^4 nodes adding 10, 100, 1000?
+
 ** TODO Double check that this is all we need.
 
 no opinion votes can be derived…
+* TODO Make parameters depend on network size
 * Colophon
 #+begin_example
 @easye <mark.evenson@status.im>
 Created: 01-SEP-2022
-Revised: <2022-09-01 Thu 15:20>
+Revised: <2022-09-01 Thu 15:32Z>
 #+end_example
