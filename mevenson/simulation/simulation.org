@@ -1,0 +1,33 @@
+* Glacier et. al. Simulation
+** Model
+*** sync v. async
+** Implementation
+*** Rust <https://github.com/logos-co/consensus-prototypes/> (Currently Private to Logos)
+* TODO Graphs for @alexanderw
+For given choice of parameters,
+
+|    | Parameter          | Alexander   | RFC 38                          |
+|----+--------------------+-------------+---------------------------------|
+| k  | neighbors in query | 100 (fixed) | 7 (undecided grow to a max 2^4) |
+| l  | look ahead         | ~500        | 19                              |
+| a1 | alpha1             | 4/5         | 4/5                             |
+| a2 | alpha2             | 1/2         | 2/5                             |
+
+retain a vector for all executed rounds contain the following three
+integers per round:
+
+   + total neighbors successfully queried
+   + total yes votes
+   + total no votes
+
+to produce a plot of total yes, no, and undecided per round.
+
+** TODO Double check that this is all we need.
+
+no opinion votes can be derived…
+* Colophon
+#+begin_example
+@easye <mark.evenson@status.im>
+Created: 01-SEP-2022
+Revised: <2022-09-01 Thu 15:20>
+#+end_example
