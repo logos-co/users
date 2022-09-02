@@ -2,14 +2,12 @@
 (in-package glacier)
 
 (defun parse-json-path (symbol)
-  "Transform a symbol into names of json nodes to navigate"
+  "Transform a symbol into a list names of json nodes to navigate"
   (rest (split-sequence:split-sequence #\. (string-downcase
                                             (symbol-name symbol)))))
 
 
-;; the result returned here is not setf-able
 (defun get-path (jsown path)
-  ;; path may either by a string or a list of strings
   (cond ((stringp path)
          (jsown:filter jsown path))
         ((and (consp path)
