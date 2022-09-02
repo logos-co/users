@@ -1,7 +1,11 @@
 (defsystem glacier
   :version "0.0.1"
-  :depends-on (jsown)
+  :depends-on (alexandria
+               jsown
+               split-sequence)
   :components ((:module source
                 :pathname "./"
-                :components ((:file "glacier")))))
+                :components ((:file "package")
+                             (:file "json-path")
+                             (:file "glacier")))))
                 
