@@ -47,9 +47,21 @@ Simulate up to 10^4 nodes adding 10, 100, 1000?
 
 opinion votes can be derived…
 * TODO Make parameters depend on network size
+* <2022-09-02 Fri> Initial implementation
+** TODO encode/decode parameters in simulation input/outout filenames
+** TODO write basic execution pipeline
+** TODO benchmark
+Along machine, architecture, and async/sync axes
+** TODO setup/run batch jobs
+*** For @AlexanderM's parameter choices
+*** For RFC 38
+** TODO instrument simulation to emit line data
+** TODO Produce graphs
+For given parameter choices show YES, NO, NONE opinion evolution over rounds
+
 * Colophon
 #+begin_example
 @easye <mark.evenson@status.im>
 Created: 01-SEP-2022
-Revised: <2022-09-02 Fri 07:08>
+Revised: <2022-09-02 Fri 11:16>
 #+end_example
