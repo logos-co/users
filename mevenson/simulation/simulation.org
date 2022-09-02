@@ -16,9 +16,9 @@ For given choice of parameters,
 retain a vector for all executed rounds contain the following three
 integers per round:
 
-   + total neighbors successfully queried
-   + total yes votes
-   + total no votes
+   + nodes in round
+   + nodes finalized to yes
+   + nodes finalized to no
 
 to produce a plot of total yes, no, and undecided per round.
 
@@ -51,5 +51,5 @@ opinion votes can be derived…
 #+begin_example
 @easye <mark.evenson@status.im>
 Created: 01-SEP-2022
-Revised: <2022-09-01 Thu 15:45Z>
+Revised: <2022-09-02 Fri 07:08>
 #+end_example
