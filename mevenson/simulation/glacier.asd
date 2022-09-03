@@ -8,5 +8,6 @@
                 :pathname "./"
                 :components ((:file "package")
                              (:file "json-path")
+                             (:file "plot")
                              (:file "glacier")))))
                 
