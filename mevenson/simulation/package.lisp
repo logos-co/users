@@ -1,4 +1,6 @@
 (defpackage glacier
   (:use :cl)
-  (:export #:grind))
+  (:export
+   #:run
+   #:grind))
 

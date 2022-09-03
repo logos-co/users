@@ -6,17 +6,19 @@
   (rest (split-sequence:split-sequence #\. (string-downcase
                                             (symbol-name symbol)))))
 
-
 (defun get-path (jsown path)
-  (cond ((stringp path)
-         (jsown:filter jsown path))
-        ((and (consp path)
-              (= 1 (length path)))
-         (jsown:filter jsown (first path)))
-        (t 
-         (get-path
-          (jsown:filter jsown (first path))
-          (rest path)))))
+  (cond ((symbolp path)
+         (get-path jsown
+                   (parse-json-path path)))
+         ((stringp path)
+          (jsown:filter jsown path))
+         ((and (consp path)
+               (= 1 (length path)))
+          (jsown:filter jsown (first path)))
+         (t 
+          (get-path
+           (jsown:filter jsown (first path))
+           (rest path)))))
 
 #|  It would be nice to use JSOWN:FILTER like this…
 

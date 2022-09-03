@@ -24,6 +24,11 @@
     $.distribution.no
     0.5))
 
+(defparameter +consensus-simulations+
+  (merge-pathnames
+   "work/consensus-prototypes/target/release-opt/consensus-simulations"
+   (user-homedir-pathname)))
+
 (defun jsown-template ()
   '(:OBJ
     ("consensus_settings"
@@ -55,40 +60,6 @@
      result
      template)))
 
-(defun run (&key (jsown (jsown-template)))
-  (let* ((parameters
-	   (encode-parameters jsown))
-	 (id ;; TODO use host-date))
-	   "0")
-	 (base
-	   (format nil "~a-~a" id parameters))
-	 (input-settings
-	   (namestring
-	    (merge-pathnames
-	     (concatenate 'string "var/" base ".json")
-	     (user-homedir-pathname))))
-	 (output-file
-	   (namestring
-	    (merge-pathnames
-	     (concatenate 'string "var/" base ".out")
-	     (user-homedir-pathname)))))
-
-    (alexandria:write-string-into-file
-     (jsown:to-json jsown)
-     input-settings
-     :if-exists :supersede)
-    (values
-     (uiop:run-program
-      `("/home/evenson/work/consensus-prototypes/target/release-opt/consensus-simulations"
-	"--input-settings" ,input-settings
-	"--output-file" ,output-file)
-      :ignore-error-status t
-      :error-output :string
-      :output :string)
-     input-settings
-     output-file)))
-		       
-
 ;;; N.b. assumes that all JSON keys are 1) lowercase, and 2) unique
 (defun encode-parameters (jsown)
   (let* ((key-json-paths
@@ -115,3 +86,59 @@
      (drakma:url-encode string :utf8)
      string)))
 
+
+(defun run (trials &key (jsown (jsown-template)))
+  (let* ((parameters
+	   (encode-parameters jsown))
+	 (id ;; TODO use host-date))
+	   "0")
+	 (base
+	   (format nil "~a-~a" id parameters))
+	 (input-settings
+	    (merge-pathnames
+	     (concatenate 'string "var/" base ".json")
+	     (user-homedir-pathname)))
+	 (output-file
+	    (merge-pathnames
+	     (concatenate 'string "var/" base ".out")
+	     (user-homedir-pathname))))
+    (alexandria:write-string-into-file
+     (jsown:to-json jsown)
+     input-settings
+     :if-exists :supersede)
+
+    (format *standard-output*
+            "~&Runnning ~a trials across ~a nodes~
+~&k=~a l=~a a1=~a a2=~a~%~tyes=~a no=~a~%"
+            trials
+            (get-path jsown '$.byzantine_settings.total_size)
+            (get-path jsown '$.consensus_settings.glacier.query.initial_query_size)
+            (get-path jsown '$.consensus_settings.glacier.look_ahead)
+            (get-path jsown '$.consensus_settings.glacier.evidence_alpha)
+            (get-path jsown '$.consensus_settings.glacier.evidence_alpha_2)
+            (get-path jsown '$.distribution.yes)
+            (get-path jsown '$.distribution.no))
+            
+    (loop :for i :from 1 :upto trials
+          :doing
+             (let ((output (namestring
+                            (make-pathname :defaults output-file
+                                           :name (format nil "~a-~a"
+                                                         (pathname-name output-file)
+                                                         i)))))
+               (uiop:run-program
+                `(,(namestring +consensus-simulations+)
+	          "--input-settings" ,(namestring input-settings)
+	          "--output-file" ,(namestring output))
+                :ignore-error-status t
+                :error-output :string
+                :output :string)
+               (format *standard-output* ".")))
+    (format *standard-output* "done~%")
+             
+    (values 
+	base)))	       
+
+
+(defun search-parmeters ()
+  
