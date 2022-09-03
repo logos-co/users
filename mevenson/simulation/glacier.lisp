@@ -1,35 +1,12 @@
 (in-package glacier)
 
-(defun json-parameters ()
-  `($.consensus_settings.glacier.evidence_alpha
-    0.8 ;;4/5
-    $.consensus_settings.glacier.evidence_alpha_2
-    0.4 ;;2/5
-    $.consensus_settings.glacier.confidence_beta
-    1 
-    $.consensus_settings.glacier.look_ahead
-    997
-    $.consensus_settings.glacier.query.initial_query_size
-    100
-    $.consensus_settings.glacier.query.query_multiplier
-    2
-    $.consensus_settings.glacier.query.max_multiplier
-    1
-    $.byzantine_settings.total_size
-    ,(expt 10 4)
-    $.byzantine_settings.distribution.honest
-    1
-    $.distribution.yes
-    0.5 ;;1/2
-    $.distribution.no
-    0.5))
-
 (defparameter +consensus-simulations+
   (merge-pathnames
    "work/consensus-prototypes/target/release-opt/consensus-simulations"
    (user-homedir-pathname)))
 
 (defun jsown-template ()
+  "Return the json template in jsown format used for each run"
   '(:OBJ
     ("consensus_settings"
      :OBJ
@@ -48,21 +25,10 @@
     ("wards" (:OBJ ("time_to_finality" :OBJ ("ttf_threshold" . 100))))
     ("network_modifiers" (:OBJ ("random_drop" :OBJ ("drop_rate" . 0))))))
 
-(defun grind ()
-  (let* ((template
-           (probe-file "~/work/consensus-prototypes/etc/glacier.json"))
-         (json
-           (alexandria:read-file-into-string template))
-         (result
-           (jsown:parse json)))
-    ;; TODO set the template based on the parameters
-    (values
-     result
-     template)))
-
 ;;; N.b. assumes that all JSON keys are 1) lowercase, and 2) unique
 (defun encode-parameters (jsown)
-  "Encode the Glacier parameters specfied by the JSOWN settings as a string suitable for use in a filename."
+  "Encode the Glacier parameters specfied by the JSOWN settings as a string suitable for use in a filename"
+  ;; TODO write the inverse of this function to parse parameters from a filename
   (let* ((key-json-paths
 	  (loop :for (json-path _) :on (json-parameters) :by #'cddr
 		:collecting json-path))
@@ -91,6 +57,7 @@
             &key
               parameters
               (jsown (jsown-template)))
+  "Run the Glacier simulation TRIALS times for PARAMETERS"
   (when parameters
     (loop :for (path value) :in parameters
           :doing
@@ -148,6 +115,7 @@
 	base)))	       
 
 (defun search-parameters ()
+  "A parameter search run"
   ;; not exactly sure why something like
   ;; (loop :for yes :from 0.4 :to 0.6 :by 0.05… has rounding problems
   ;;
@@ -163,3 +131,41 @@
   
   
   
+;;; unused
+(defun json-parameters ()
+  `($.consensus_settings.glacier.evidence_alpha
+    0.8 ;;4/5
+    $.consensus_settings.glacier.evidence_alpha_2
+    0.4 ;;2/5
+    $.consensus_settings.glacier.confidence_beta
+    1 
+    $.consensus_settings.glacier.look_ahead
+    997
+    $.consensus_settings.glacier.query.initial_query_size
+    100
+    $.consensus_settings.glacier.query.query_multiplier
+    2
+    $.consensus_settings.glacier.query.max_multiplier
+    1
+    $.byzantine_settings.total_size
+    ,(expt 10 4)
+    $.byzantine_settings.distribution.honest
+    1
+    $.distribution.yes
+    0.5 ;;1/2
+    $.distribution.no
+    0.5))
+
+;;; unused
+(defun grind ()
+  (let* ((template
+           (probe-file "~/work/consensus-prototypes/etc/glacier.json"))
+         (json
+           (alexandria:read-file-into-string template))
+         (result
+           (jsown:parse json)))
+    ;; TODO set the template based on the parameters
+    (values
+     result
+     template)))
+

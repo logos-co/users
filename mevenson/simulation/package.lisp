@@ -1,6 +1,8 @@
 (defpackage glacier
   (:use :cl)
   (:export
+   #:summarize
+   #:summarize-all
    #:run
-   #:grind))
+   #:search-parameters))
 
