@@ -49,6 +49,9 @@ opinion votes can be derived…
 * TODO Make parameters depend on network size
 * <2022-09-02 Fri> Initial implementation
 ** TODO encode/decode parameters in simulation input/outout filenames
+*** TODO record random seed used for execution
+Probably should be able to be specified in configuration as otherwise
+it needs to be parsed from =consensus-simulations= stdout.
 ** TODO write basic execution pipeline
 ** TODO benchmark
 Along machine, architecture, and async/sync axes
@@ -61,7 +64,7 @@ For given parameter choices show YES, NO, NONE opinion evolution over rounds
 
 * Colophon
 #+begin_example
-@easye <mark.evenson@status.im>
-Created: 01-SEP-2022
-Revised: <2022-09-02 Fri 11:16>
+    @easye <mark.evenson@status.im>
+    Created: 01-SEP-2022
+    Revised: <2022-09-03 Sat 03:58>
 #+end_example

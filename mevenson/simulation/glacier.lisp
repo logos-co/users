@@ -2,9 +2,11 @@
 
 (defun json-parameters ()
   `($.consensus_settings.glacier.evidence_alpha
-    4/5
+    0.8 ;;4/5
     $.consensus_settings.glacier.evidence_alpha_2
-    2/5
+    0.4 ;;2/5
+    $.consensus_settings.glacier.confidence_beta
+    0.5 ;;1/2
     $.consensus_settings.glacier.look_ahead
     997
     $.consensus_settings.glacier.query.initial_query_size
@@ -18,9 +20,9 @@
     $.byzantine_settings.distribution.honest
     1
     $.distribution.yes
-    1/2
+    0.5 ;;1/2
     $.distribution.no
-    1/2))
+    0.5))
 
 (defun jsown-template ()
   '(:OBJ
@@ -28,15 +30,17 @@
      :OBJ
      ("glacier"
       :OBJ
-      ("evidence_alpha" . 4/5) ("evidence_alpha_2" . 1/2)
+      ("evidence_alpha" . 0.8 )
+      ("evidence_alpha_2" . 0.5)
+      ("confidence_beta" . 1.0)
       ("look_ahead" . 20)
       ("query" :OBJ ("query_size" . 7) ("initial_query_size" . 7)
        ("query_multiplier" . 2) ("max_multiplier" . 4))))
-    ("distribution" :OBJ ("yes" . 1/2) ("no" . 1/2) ("none" . 0))
+    ("distribution" :OBJ ("yes" . 0.5)  ("no" . 0.5) ("none" . 0))
     ("byzantine_settings" :OBJ ("total_size" . 1000)
-     ("distribution" :OBJ ("honest" . 1) ("infantile" . 0) ("random" . 0)
-      ("omniscient" . 0)))
-    ("wards" (:OBJ ("time_to_finality" :OBJ ("ttf_threshold" . 2))))
+     ("distribution"
+      :OBJ ("honest" . 1) ("infantile" . 0) ("random" . 0) ("omniscient" . 0)))
+    ("wards" (:OBJ ("time_to_finality" :OBJ ("ttf_threshold" . 100))))
     ("network_modifiers" (:OBJ ("random_drop" :OBJ ("drop_rate" . 0))))))
 
 (defun grind ()
@@ -51,14 +55,42 @@
      result
      template)))
 
-(defun run ()
-  (values
-   (uiop:run-program '("./target/release-opt/consensus-simulations"
-                       "--input-settings" "etc/glacier.json"
-                       "--output-file" "var/glacier.output"))))
+(defun run (&key (jsown (jsown-template)))
+  (let* ((parameters
+	   (encode-parameters jsown))
+	 (id ;; TODO use host-date))
+	   "0")
+	 (base
+	   (format nil "~a-~a" id parameters))
+	 (input-settings
+	   (namestring
+	    (merge-pathnames
+	     (concatenate 'string "var/" base ".json")
+	     (user-homedir-pathname))))
+	 (output-file
+	   (namestring
+	    (merge-pathnames
+	     (concatenate 'string "var/" base ".out")
+	     (user-homedir-pathname)))))
+
+    (alexandria:write-string-into-file
+     (jsown:to-json jsown)
+     input-settings
+     :if-exists :supersede)
+    (values
+     (uiop:run-program
+      `("/home/evenson/work/consensus-prototypes/target/release-opt/consensus-simulations"
+	"--input-settings" ,input-settings
+	"--output-file" ,output-file)
+      :ignore-error-status t
+      :error-output :string
+      :output :string)
+     input-settings
+     output-file)))
+		       
 
 ;;; N.b. assumes that all JSON keys are 1) lowercase, and 2) unique
-(defun encode-filename (jsown)
+(defun encode-parameters (jsown)
   (let* ((key-json-paths
 	  (loop :for (json-path _) :on (json-parameters) :by #'cddr
 		:collecting json-path))
