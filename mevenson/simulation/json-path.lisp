@@ -6,6 +6,7 @@
   (rest (split-sequence:split-sequence #\. (string-downcase
                                             (symbol-name symbol)))))
 
+;;  TODO implement array selectors
 (defun get-path (jsown path)
   (cond ((symbolp path)
          (get-path jsown
@@ -20,21 +21,12 @@
            (jsown:filter jsown (first path))
            (rest path)))))
 
-#|  It would be nice to use JSOWN:FILTER like this…
-
 (defun set-path (jsown path value)
-  (setf
-   (jsown:filter jsown (parse-json-path path))
-   value)
-jsown)
-
-but that doesn't easily work due to JSOWN:FILTER being a macro, so one
-can't use CL:REDUCE
-|#
-
-
-(defun set-path (jsown path value)
-  (cond ((stringp path)
+  (cond ((symbolp path)
+         (set-path jsown
+                   (parse-json-path path)
+                   value))
+        ((stringp path)
          (setf 
           (jsown:filter jsown path)
           value))
@@ -48,4 +40,18 @@ can't use CL:REDUCE
           (jsown:filter jsown (first path))
           (rest path)
           value))))
+
+
+#|  It would have be nice to use JSOWN:FILTER like this…
+
+(defun set-path (jsown path value)
+  (setf
+   (jsown:filter jsown (parse-json-path path))
+   value)
+jsown)
+
+but that doesn't easily work due to JSOWN:FILTER being a macro, so one
+can't use CL:REDUCE
+|#
+
 
