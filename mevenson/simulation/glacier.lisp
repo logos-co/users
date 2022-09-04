@@ -50,8 +50,12 @@
 		    (loop for (key . value) :in key-values
 			  :collecting (format nil "~a=~a" key value))))))
     (values
-     (drakma:url-encode string :utf8)
+     (do-urlencode:urlencode string :queryp t)
      string)))
+
+(defun decode-parameters (filename)
+  (let ((name (pathname-name (pathname filename))))
+    (do-urlencode:urldecode name :queryp t)))
 
 (defun run (trials
             &key
@@ -128,8 +132,6 @@
                 `(($.byzantine_settings.total_size ,(expt 10 4))
                   ($.distribution.yes ,(coerce yes 'single-float))
                   ($.distribution.no ,(coerce no 'single-float))))))
-  
-  
   
 ;;; unused
 (defun json-parameters ()

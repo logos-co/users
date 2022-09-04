@@ -1,7 +1,7 @@
 (defsystem glacier
-  :version "0.0.1"
+  :version "0.0.2"
   :depends-on (alexandria
-	       drakma
+               do-urlencode
                jsown
                split-sequence)
   :components ((:module source
