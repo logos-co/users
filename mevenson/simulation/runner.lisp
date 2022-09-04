@@ -10,7 +10,10 @@
             &key
               parameters
               (jsown (jsown-template)))
-  "Run the Glacier simulation TRIALS times for PARAMETERS"
+  "Run the Glacier simulation TRIALS times for PARAMETERS
+
+PARAMETERS are a list of (JSON-PATH VALUE) pairs to get in the JSOWN
+template."
   (when parameters
     (loop :for (path value) :in parameters
           :doing
@@ -49,18 +52,24 @@
             
     (loop :for i :from 1 :upto trials
           :doing
-             (let ((output (namestring
-                            (make-pathname :defaults output-file
-                                           :name (format nil "~a-~a"
-                                                         (pathname-name output-file)
-                                                         i)))))
+             (let* ((output
+                      (make-pathname :defaults output-file
+                                     :name (format nil "~a-~a"
+                                                   (pathname-name output-file)
+                                                   i)))
+                    (stdout
+                      (make-pathname :defaults output
+                                     :type "stdout"))
+                    (stderr
+                      (make-pathname :defaults output
+                                     :type "stderr")))
                (uiop:run-program
                 `(,(namestring +consensus-simulations+)
 	          "--input-settings" ,(namestring input-settings)
 	          "--output-file" ,(namestring output))
                 :ignore-error-status t
-                :error-output :string
-                :output :string)
+                :error-output stderr
+                :output stdout)
                (format *standard-output* ".")))
     (format *standard-output* "done~%")
              
