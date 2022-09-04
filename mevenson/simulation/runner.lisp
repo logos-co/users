@@ -17,9 +17,7 @@ template."
     (loop :for (path value) :in parameters
           :doing
              (set-path jsown path value)))
-  (let* ((parameter-string
-	   (encode-parameters jsown))
-	 (machine 
+  (let* ((machine 
 	   (machine-instance))
          (time
            (format nil "~a" (get-universal-time)))
@@ -27,7 +25,6 @@ template."
            (string +filename-record-separator+))
 	 (base
 	   (concatenate 'string
-                        parameter-string separator
                         machine separator
                         time))
 	 (input-settings

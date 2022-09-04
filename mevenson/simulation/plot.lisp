@@ -58,30 +58,36 @@ source using 3 with linespoints pointnumber 11 title 'yes', ~
     (values
      plot 
      data)))
-
-(defun gnuplot-legend (filename)
+                         
+(defun parameters-for (path)
   (let* ((name
-           (do-urlencode:urldecode (pathname-name filename) :queryp t))
-         (all-pairs
-           (first 
-            (split-sequence:split-sequence +filename-record-separator+ name)))
-         (pairs
-           (split-sequence:split-sequence #\space all-pairs))
-         (assoc-pairs
-           (loop :for pair :in pairs
-                 :collecting (let ((key-value (split-sequence:split-sequence #\= pair)))
-                               `(,(first key-value) . ,(second key-value))))))
-    (flet
-        ((get-value (key)
-           (alexandria:assoc-value assoc-pairs key :test 'equal)))
+           (pathname-name path))
+         (config-base
+           (make-pathname :defaults path
+                          :name (subseq name 0 (search
+                                                (string +filename-record-separator+)
+                                                name :from-end t))
+                          :type "json"))
+         (config
+           (alexandria:read-file-into-string config-base))
+         (j
+           (jsown:parse config)))
+    (values
+     j
+     config-base)))
+
+(defun gnuplot-legend (path)
+  (let ((jsown (parameters-for path)))
+    (flet ((get-value (key)
+             (get-path jsown key)))
       (values
        (format nil "l=~a α_1=~a α_2=~a k=~a"
-               (get-value "look_ahead")
-               (get-value "evidence_alpha")
-               (get-value "evidence_alpha_2")
-               (get-value "initial_query_size"))
-       assoc-pairs))))
-                         
+               (get-value '$.consensus_settings.glacier.look_ahead)
+               (get-value '$.consensus_settings.glacier.evidence_alpha)
+               (get-value '$.consensus_settings.glacier.evidence_alpha_2)
+               (get-value '$.consensus_settings.glacier.query.initial_query_size))
+       jsown))))
+      
+             
 
-
-    
+   
