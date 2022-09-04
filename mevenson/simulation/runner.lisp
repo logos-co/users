@@ -94,4 +94,21 @@ template."
                 `(($.byzantine_settings.total_size ,(expt 10 4))
                   ($.distribution.yes ,(coerce yes 'single-float))
                   ($.distribution.no ,(coerce no 'single-float))))))
-  
+
+(defun search-parameters-async ()
+  "A parameter search run"
+  ;; not exactly sure why something like
+  ;; (loop :for yes :from 0.4 :to 0.6 :by 0.05… has rounding problems
+  ;;
+  (loop :for yes :from 2/5 :to     3/5 :by 1/20
+        :for no  :from 3/5 :downto 2/5 :by 1/20
+        :doing
+           (run 10
+                :parameters
+                `(($.byzantine_settings.total_size ,(expt 10 3))
+                  ($.distribution.yes ,(coerce yes 'single-float))
+                  ($.simulation_style (:obj ("Async" :obj ("chunks" . 20))))
+                  ($.distribution.no ,(coerce no 'single-float))))))
+
+
+

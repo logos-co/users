@@ -23,6 +23,7 @@
      ("distribution"
       :OBJ ("honest" . 1) ("infantile" . 0) ("random" . 0) ("omniscient" . 0)))
     ("wards" (:OBJ ("time_to_finality" :OBJ ("ttf_threshold" . 100))))
+    ("simulation_style" . "Sync")
     ("network_modifiers" (:OBJ ("random_drop" :OBJ ("drop_rate" . 0))))))
 
 ;;; N.b. assumes that all JSON keys are 1) lowercase, and 2) unique
