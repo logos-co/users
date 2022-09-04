@@ -9,5 +9,6 @@
                 :components ((:file "package")
                              (:file "json-path")
                              (:file "plot")
+                             (:file "runner")
                              (:file "glacier")))))
                 
