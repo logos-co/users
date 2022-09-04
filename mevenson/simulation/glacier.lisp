@@ -11,10 +11,15 @@
       ("evidence_alpha_2" . 0.5)
       ("confidence_beta" . 1.0)
       ("look_ahead" . 500)
-      ("query" :OBJ ("query_size" . 100) ("initial_query_size" . 100)
-       ("query_multiplier" . 1) ("max_multiplier" . 1))))
-    ("distribution" :OBJ ("yes" . 0.5)  ("no" . 0.5) ("none" . 0))
-    ("byzantine_settings" :OBJ ("total_size" . 10000)
+      ("query" :OBJ
+       ("query_size" . 100)
+       ("initial_query_size" . 100)
+       ("query_multiplier" . 1)
+       ("max_multiplier" . 1))))
+    ("distribution"
+     :OBJ ("yes" . 0.5)  ("no" . 0.5) ("none" . 0))
+    ("byzantine_settings"
+     :OBJ ("total_size" . 10000)
      ("distribution"
       :OBJ ("honest" . 1) ("infantile" . 0) ("random" . 0) ("omniscient" . 0)))
     ("wards" (:OBJ ("time_to_finality" :OBJ ("ttf_threshold" . 100))))
@@ -52,7 +57,6 @@
   (let ((name (pathname-name (pathname filename))))
     (do-urlencode:urldecode name :queryp t)))
 
-
 ;;; unused
 (defun json-parameters ()
   `($.consensus_settings.glacier.evidence_alpha
@@ -63,6 +67,8 @@
     1 
     $.consensus_settings.glacier.look_ahead
     997
+    $.consensus_settings.glacier.query.query_size  ;; difference from initial_query_size ?
+    100
     $.consensus_settings.glacier.query.initial_query_size
     100
     $.consensus_settings.glacier.query.query_multiplier

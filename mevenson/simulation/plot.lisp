@@ -1,7 +1,10 @@
 (in-package :glacier)
 
+(defparameter +filename-record-separator+
+  #\-)
+
 (defun summarize (file)
-  "Summarize the contents of polars FILE as per round undecided, no, and yes votes"
+  "Summarize the contents of Polars formatted FILE as per round undecided, no, and yes votes"
   (let* ((s
            (alexandria:read-file-into-string file))
          (j
@@ -60,8 +63,8 @@ source using 3 with linespoints pointnumber 11 title 'yes', ~
   (let* ((name
            (do-urlencode:urldecode (pathname-name filename) :queryp t))
          (all-pairs
-           (second ;; not going to work for negative integer values
-            (split-sequence:split-sequence #\- name)))
+           (first 
+            (split-sequence:split-sequence +filename-record-separator+ name)))
          (pairs
            (split-sequence:split-sequence #\space all-pairs))
          (assoc-pairs

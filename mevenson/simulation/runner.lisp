@@ -5,7 +5,6 @@
    "work/consensus-prototypes/target/release-opt/consensus-simulations"
    (user-homedir-pathname)))
 
-
 (defun run (trials
             &key
               parameters
@@ -20,10 +19,17 @@ template."
              (set-path jsown path value)))
   (let* ((parameter-string
 	   (encode-parameters jsown))
-	 (id ;; TODO use host-date))
-	   "0")
+	 (machine 
+	   (machine-instance))
+         (time
+           (format nil "~a" (get-universal-time)))
+         (separator
+           (string +filename-record-separator+))
 	 (base
-	   (format nil "~a-~a" id parameter-string))
+	   (concatenate 'string
+                        parameter-string separator
+                        machine separator
+                        time))
 	 (input-settings
 	    (merge-pathnames
 	     (concatenate 'string "var/" base ".json")
@@ -54,8 +60,9 @@ template."
           :doing
              (let* ((output
                       (make-pathname :defaults output-file
-                                     :name (format nil "~a-~a"
+                                     :name (format nil "~a~a~a"
                                                    (pathname-name output-file)
+                                                   (string +filename-record-separator+)
                                                    i)))
                     (stdout
                       (make-pathname :defaults output
