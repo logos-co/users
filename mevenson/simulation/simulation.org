@@ -44,16 +44,18 @@ Simulate up to 10^4 nodes adding 10, 100, 1000?
 | honest           | $.byzantine_settings.honest                   |       |
 | yes              | $.distribution.yes                            |       |
 | no               | $.distribution.no                             |       |
-|                  |                                               |       |
 
-** TODO Double check that this is all we need.
+
 
 opinion votes can be derived…
 * TODO Make parameters depend on network size
 * <2022-09-02 Fri> Initial implementation
 ** TODO encode/decode parameters in simulation input/output filenames
 All are encoded except for =query-size=.  What is the difference between this and =initial_query_size=?
-*** TODO record random seed used for execution
+*** DONE record random seed used for execution
+CLOSED: [2022-09-05 Mon 06:05]
+- CLOSING NOTE [2022-09-05 Mon 06:05] \\
+  Capture stdin/stdout as files
 Probably should be able to be specified in configuration as otherwise
 it needs to be parsed from =consensus-simulations= stdout.
 ** DONE write basic execution pipeline
@@ -61,7 +63,10 @@ CLOSED: [2022-09-04 Sun 08:35]
 - CLOSING NOTE [2022-09-04 Sun 08:35]
 ** TODO benchmark
 Along machine, architecture, and async/sync axes
-** TODO setup/run batch jobs
+** DONE setup/run batch jobs
+CLOSED: [2022-09-05 Mon 06:05]
+- CLOSING NOTE [2022-09-05 Mon 06:05] \\
+  Finished with perhaps a little less configurability than I wished.
 *** For @AlexanderM's parameter choices
 *** For RFC 38
 ** TODO instrument simulation to emit line data
@@ -70,9 +75,55 @@ CLOSED: [2022-09-04 Sun 08:35]
 - CLOSING NOTE [2022-09-04 Sun 08:35]
 For given parameter choices show YES, NO, NONE opinion evolution over rounds
 
+* Analysis
+** <2022-09-04 Sun>
+
+Ten trials were run for the following parameters:
+
+#+caption: parameters
+| n   |                 10000 | nodes             |
+| l   |                   500 | look ahead        |
+| k   |                   100 | neighbors (fixed) |
+| α1  |                   0.8 |                   |
+| α2  |                   0.5 |                   |
+| yes | 0.49 to 0.51 by 0.001 |                   |
+| no  |               1 - yes |                   |
+
+
+*** Results
+
+The resulting data can be found in <http://glacier.not.org/20220904a/>
+which is organized as follows:
+
+|-------------------------------+---------------------------------------------------------------------------------|
+| parameters for ten trials     | <http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871284173.json>      |
+|-------------------------------+---------------------------------------------------------------------------------|
+| Polars output of first trial  | <http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871284173-1.out>     |
+| stderr of first trial         | <http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871284173-1.stderr>  |
+| stdout of first trial         | <http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871284173-1.stderr>  |
+| vote totals per round         | <http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871284173-1.data>    |
+| gnuplot script for graph      | <http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871284173-1.gnuplot> |
+|-------------------------------+---------------------------------------------------------------------------------|
+| Polars output of second trial | <http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871284173-2.out>     |
+| stderr of second trial        | <http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871284173-2.stderr>  |
+| …                             |                                                                                 |
+|-------------------------------+---------------------------------------------------------------------------------|
+| Polars output of second trial | <http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871284173-3.out>     |
+| …                             |                                                                                 |
+
+*** Analysis
+
+All trials appear to converge to an absolute population of =yes= or
+=no= within several rounds.
+
+No trial fails to converge to such an absolute population.
+
+All trials with the same parameter choices have identical node vote
+totals in each round, even though the random seed is different.   
+
 * Colophon
 #+begin_example
     @easye <mark.evenson@status.im>
     Created: 01-SEP-2022
-    Revised: <2022-09-04 Sun 08:35>
+    Revised: <2022-09-05 Mon 06:06>
 #+end_example
