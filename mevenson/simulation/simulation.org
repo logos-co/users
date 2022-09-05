@@ -116,7 +116,9 @@ which is organized as follows:
 All trials appear to converge to an absolute population of =yes= or
 =no= within several rounds.
 
-No trial fails to converge to such an absolute population.
+No trial fails to converge to such an absolute population, except
+those with a exactly bivalent distribution of =yes= and =no= opinions,
+which never appear to converge.
 
 All trials with the same parameter choices have identical node vote
 totals in each round, even though the random seed is different,
@@ -128,5 +130,5 @@ et. al.  This is highly suscipicious.
 #+begin_example
     @easye <mark.evenson@status.im>
     Created: 01-SEP-2022
-    Revised: <2022-09-05 Mon 06:06>
+    Revised: <2022-09-05 Mon 15:03>
 #+end_example
