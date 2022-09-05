@@ -119,7 +119,10 @@ All trials appear to converge to an absolute population of =yes= or
 No trial fails to converge to such an absolute population.
 
 All trials with the same parameter choices have identical node vote
-totals in each round, even though the random seed is different.   
+totals in each round, even though the random seed is different,
+e.g. <http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871287898-1.data>,
+<http://glacier.not.org/20220904a/debian-c-2-4gib-fra1-01-3871287898-2.data>,
+et. al.  This is highly suscipicious.
 
 * Colophon
 #+begin_example
