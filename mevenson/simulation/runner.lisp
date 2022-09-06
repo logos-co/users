@@ -85,8 +85,8 @@ template."
   ;; not exactly sure why something like
   ;; (loop :for yes :from 0.4 :to 0.6 :by 0.05… has rounding problems
   ;;
-  (loop :for yes :from 2/5 :to     3/5 :by 1/20
-        :for no  :from 3/5 :downto 2/5 :by 1/20
+  (loop :for yes :from 2/5 :to     3/5 :by 1/500
+        :for no  :from 3/5 :downto 2/5 :by 1/500
         :with rounds = 10000
         :doing
            (run 10
