@@ -9,4 +9,5 @@ It is the hope that each peice of work ends up finding a more permanent place wi
 ## Participation
 1. Create a subdirectory called your username
 2. Put your work in it
-3. Share it
+3. Best if you add additional READMEs to your subdirectories to help keep track of what is what. 
+4. Share it
