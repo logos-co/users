@@ -6,12 +6,14 @@ def comm(N,delta,A,P):
     n = N
     r = 0
     Prob = 0.0
+    m = 0
     while Prob < delta:
         K_1 = K
         n_1 = n
         r_1 = r
         Prob_1 = Prob
-        K = K + 1
+        m = m +1
+        K = 2*m + 1
         n = N // K
         r = N % K
         if 0 < r:
